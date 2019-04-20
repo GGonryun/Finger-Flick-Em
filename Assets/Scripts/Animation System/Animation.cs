@@ -7,7 +7,7 @@ namespace Animation
     /// <summary>
     /// Contains logic about how to animate an object by Lerping.
     /// </summary>
-    /// If a new animation is implemented please add it to the "AnimationType.cs" enum, switch, and 
+    /// If a new animation is implemented please add it to the "AnimationType.cs" enum, switch, and fields list.
     public abstract class Animation : IAnimation
     {
         /// <summary>
@@ -19,19 +19,19 @@ namespace Animation
         {
             float elapsedTime = 0.0f;
 
-            while (elapsedTime < duration)
+            while (elapsedTime <= duration)
             {
                 float t = elapsedTime / duration;
-                t = TimingFunction(t);
 
-                set(Vector2.Lerp(start, stop, t));
+                set(TimingFunction(start, stop, t));
 
                 yield return new WaitForEndOfFrame();
                 elapsedTime += Time.deltaTime;
             }
+            set(stop);
         }
 
-        public abstract float TimingFunction(float t);
+        public abstract Vector2 TimingFunction(Vector2 from, Vector2 to, float time);
 
     }
 }

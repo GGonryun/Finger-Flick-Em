@@ -1,6 +1,6 @@
 namespace Animation
 {
-    public enum Type { None, Smoothstep, Smootherstep, Exponential, EaseIn, EaseOut, Boing }
+    public enum Type { None, Smoothstep, Smootherstep, Exponential, EaseIn, EaseOut, SoftBoing, HardBoing }
 
     /// <summary>
     /// Simple Factory class for Animations.
@@ -13,7 +13,8 @@ namespace Animation
         readonly static Animation exponential = new Exponential();
         readonly static Animation easeIn = new EaseIn();
         readonly static Animation easeOut = new EaseOut();
-        readonly static Animation boing = new Boing();
+        readonly static Animation softBoing = new Boing(curvature: 1.2f);
+        readonly static Animation hardBoing = new Boing(offset: .6f, intensity: 4.5f, amplitude: 1.1f, curvature: 1.1f);
 
         public static Animation Get(Type type)
         {
@@ -29,8 +30,10 @@ namespace Animation
                     return easeIn;
                 case Type.EaseOut:
                     return easeOut;
-                case Type.Boing:
-                    return boing;
+                case Type.SoftBoing:
+                    return softBoing;
+                case Type.HardBoing:
+                    return hardBoing;
                 default:
                     return none;
             }
