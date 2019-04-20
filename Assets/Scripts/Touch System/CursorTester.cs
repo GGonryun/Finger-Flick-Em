@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,9 +6,9 @@ namespace TouchSystem.Debugging {
 
 	public class CursorTester : MonoBehaviour {
 		[SerializeField]
-		private Cursor prefabCursor;
+		private Cursor prefabCursor = null;
 		[SerializeField]
-		private Transform folder;
+		private Transform folder = null;
 		private Dictionary<int, Cursor> cursors = new Dictionary<int, Cursor>();
 
 		public AudioSource audioSource;
