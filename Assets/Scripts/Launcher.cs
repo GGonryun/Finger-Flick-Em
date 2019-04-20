@@ -4,12 +4,11 @@ using UnityEngine;
 
 public class Launcher : MonoBehaviour
 {
-    [SerializeField] Transform basketball = null;
     [SerializeField] Vector3 launchPoint = Vector3.zero;
     [SerializeField] Vector2 velocity = Vector2.up;
     [SerializeField] float discrepency = 0.00f;
     [SerializeField] float spawnChance = 0f;
-    [SerializeField] Recycler recyclingBin;
+    [SerializeField] Recycler recyclingBin = null;
 
     void Awake()
     {
@@ -20,7 +19,7 @@ public class Launcher : MonoBehaviour
     {
         bool success = Random.Range(0f, 1f) <= spawnChance ? true : false;
 
-        if(active && success)
+        if (active && success)
         {
             Transform ball = recyclingBin.Get();
 
@@ -41,7 +40,9 @@ public class Launcher : MonoBehaviour
     {
         ball.position = launchPoint;
         Rigidbody2D rb = ball.GetComponent<Rigidbody2D>();
-        rb.velocity = velocity;
+        float x = Random.Range(velocity.x - discrepency, velocity.x + discrepency);
+        float y = Random.Range(velocity.y - discrepency, velocity.y + discrepency);
+        rb.velocity = new Vector2(x, y);
     }
 
     float rate = .1f;

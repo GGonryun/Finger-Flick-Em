@@ -18,5 +18,5 @@ public class Basketball : MonoBehaviour
         reclaimer.Reclaim(this.transform);
     }
 
-    float timer = 4.0f;
+    float timer = 8.0f;
 }
