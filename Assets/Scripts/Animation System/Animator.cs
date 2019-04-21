@@ -20,9 +20,9 @@ namespace Animation
         /// <summary>
         /// Animates the UI object this script is attached to.
         /// </summary>
-        public void Animate()
+        public IEnumerator Animate()
         {
-            StartCoroutine(Helper(Factory.Get(type)));
+            yield return StartCoroutine(Helper(Factory.Get(type)));
         }
 
         #region BLACKBOX

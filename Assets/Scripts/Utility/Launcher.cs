@@ -10,9 +10,14 @@ public class Launcher : MonoBehaviour
     [SerializeField] float spawnChance = 0f;
     [SerializeField] Recycler recyclingBin = null;
 
-    void Awake()
+    public void Activate()
     {
         InvokeRepeating("Launch", delay, rate);
+    }
+
+    public void Deactivate()
+    {
+        CancelInvoke("Launch");
     }
 
     void Launch()

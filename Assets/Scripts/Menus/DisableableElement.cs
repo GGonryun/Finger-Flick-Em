@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class DisableableElement : MenuElement
 {
-    public override void Open()
+    public override IEnumerator Open()
     {
-        Debug.Log("Greetings!");
         gameObject.SetActive(true);
+        yield return null;
     }
 
-    public override void Close()
+    public override IEnumerator Close()
     {
-        Debug.Log("Goodbye");
         gameObject.SetActive(false);
+        yield return null;
     }
 }

@@ -9,21 +9,21 @@ public sealed class Element : MenuElement
 
     [SerializeField] MenuElement[] elements = new MenuElement[0];
 
-    public override void Open()
+    public override IEnumerator Open()
     {
-        openAnimation.Animate();
         foreach (MenuElement menuElement in elements)
         {
-            menuElement.Open();
+            yield return StartCoroutine(menuElement.Open());
         }
+        yield return StartCoroutine(openAnimation.Animate());
     }
 
-    public override void Close()
+    public override IEnumerator Close()
     {
-        closeAnimation.Animate();
+        yield return StartCoroutine(closeAnimation.Animate());
         foreach(MenuElement menuElement in elements)
         {
-            menuElement.Close();
+            yield return StartCoroutine(menuElement.Close());
         }
     }
 
