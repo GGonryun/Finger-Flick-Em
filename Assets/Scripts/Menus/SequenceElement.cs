@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public sealed class Element : MenuElement
+public sealed class SequenceElement : MenuElement
 {
     public Animation.Animator openAnimation;
     public Animation.Animator closeAnimation;

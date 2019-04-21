@@ -1,18 +1,17 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MenuInflator : MonoBehaviour
 {
-    [SerializeField] MenuElement menu;
+    [SerializeField] MenuElement[] menus;
 
-    public void Inflate()
+    public IEnumerator Inflate(int i)
     {
-        StartCoroutine(menu.Open());
+        yield return StartCoroutine(menus[i].Open());
     }
 
-    public void Deflate()
+    public IEnumerator Deflate(int i)
     {
-        StartCoroutine(menu.Close());
+        yield return StartCoroutine(menus[i].Close());
     }
 }

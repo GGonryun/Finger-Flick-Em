@@ -10,6 +10,7 @@ namespace Animation
     /// </summary>
     public class Animator : MonoBehaviour
     {
+        [Header("Settings")]
         [SerializeField] Vector2 startingPosition = Vector2.zero;
         [SerializeField] Vector2 endingPosition = Vector2.zero;
         [SerializeField] float duration = 0f;
