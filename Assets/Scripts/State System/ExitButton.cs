@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class ExitButton : MonoBehaviour
 {
-
     public void Exit()
     {
         switch(GameManager.Current.state)
@@ -16,6 +15,7 @@ public class ExitButton : MonoBehaviour
                 GameManager.Current.ChangeState(0);
                 break;
             case GameState.GamePlay:
+                GameManager.Current.LoadMenuScene();
                 GameManager.Current.ChangeState(0);
                 break;
             case GameState.Pause:

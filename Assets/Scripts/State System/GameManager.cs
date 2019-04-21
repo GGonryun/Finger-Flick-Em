@@ -10,12 +10,27 @@ public class GameManager : Singleton<GameManager>
 {
     public GameState state = GameState.None;
     [SerializeField] MenuInflator menuInflator = null;
+    [SerializeField] Transform uiColliderFolder = null;
     [SerializeField] Recycler recycler = null;
     [SerializeField] GameSettings settings = null;
-    [SerializeField] Launcher[] launchers = new Launcher[4];
     [SerializeField] AudioSource themeSong = null;
+    [SerializeField] Transform audioFolder = null;
+    [SerializeField] SceneLoader sceneLoader = null;
+    [SerializeField] Launcher[] launchers = new Launcher[4];
+    protected override void Awake()
+    {
+        base.Awake();
+        Initialize();
+    }
+
+    void Start()
+    {
+        ChangeState(0);
+    }
+
     public void Initialize()
     {
+        sceneLoader.Load(1);
         state = GameState.None;
         ProtectGameObjects();
         PlayThemeSong(true);
@@ -25,8 +40,9 @@ public class GameManager : Singleton<GameManager>
     {
         DontDestroyOnLoad(this);
         DontDestroyOnLoad(recycler);
-        DontDestroyOnLoad(settings);
         DontDestroyOnLoad(menuInflator);
+        DontDestroyOnLoad(audioFolder);
+        DontDestroyOnLoad(uiColliderFolder);
     }
 
     public void CloseApplication()
@@ -45,10 +61,19 @@ public class GameManager : Singleton<GameManager>
         ChangeMenu(s);
         state = (GameState)s;
     }
+    public void LoadGameScene()
+    {
+        sceneLoader.Load(2);
+    }
+
+    public void LoadMenuScene()
+    {
+        sceneLoader.Load(1);
+    }
 
     public void PlayThemeSong(bool play)
     {
-        if (play)
+        if (play && !themeSong.isPlaying)
             themeSong.Play();
         else
             themeSong.Stop();

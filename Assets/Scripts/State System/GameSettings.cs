@@ -38,6 +38,12 @@ public class GameSettings : MonoBehaviour
         SetBalls();
         SetPlanet();
         SetMode();
+        GameManager.Current.LoadGameScene();
+    }
+
+    public void EnableAudio()
+    {
+        SetAudioLevel(defaultAudioLevel);
     }
 
     void SetBalls()

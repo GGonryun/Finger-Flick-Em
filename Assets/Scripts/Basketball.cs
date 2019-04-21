@@ -16,6 +16,7 @@ public class Basketball : MonoBehaviour, ILaunchable
     {
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
         rb.velocity = force;
+        rb.angularVelocity = Random.Range(0f, 180f);
         StartCoroutine(Timeout());
     }
     IEnumerator Timeout()
