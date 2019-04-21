@@ -1,22 +1,27 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
-public class Basketball : MonoBehaviour
+[RequireComponent(typeof(Rigidbody2D))]
+public class Basketball : MonoBehaviour, ILaunchable
 {
     public Recycler reclaimer;
 
-    public void Initialize(Recycler reclaimer)
+    public void Initialize(Vector2 position, Recycler reclaimer)
     {
         this.reclaimer = reclaimer;
+        this.transform.position = position;
+    }
+
+    public void Launch(Vector3 force)
+    {
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        rb.velocity = force;
         StartCoroutine(Timeout());
     }
-
-    public IEnumerator Timeout()
+    IEnumerator Timeout()
     {
         yield return new WaitForSeconds(timer);
-        reclaimer.Reclaim(this.transform);
+        reclaimer.Reclaim(this);
     }
-
     float timer = 8.0f;
 }

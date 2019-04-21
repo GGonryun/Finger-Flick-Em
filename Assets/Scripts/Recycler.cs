@@ -1,21 +1,24 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Recycler : MonoBehaviour
 {
-    Stack<Transform> basketballs = new Stack<Transform>(30);
-    [SerializeField] Transform basketball = null;
+    Stack<Basketball> basketballs = new Stack<Basketball>(30);
+    [SerializeField] Basketball basketball = null;
 
-    public void Reclaim(Transform basketball)
+    public void Reclaim(Basketball basketball)
     {
-        basketballs.Push(basketball);
+        lock (lockObject)
+        {
+            basketballs.Push(basketball);
+        }
         basketball.gameObject.SetActive(false);
     }
 
-    public Transform Get()
+    public Basketball Get()
     {
-        Transform ball;
+        Basketball ball;
         if (basketballs.Count == 0)
             ball = Create();
         else
@@ -24,16 +27,21 @@ public class Recycler : MonoBehaviour
         return ball;
     }
 
-    Transform Create()
+    Basketball Create()
     {
         return Instantiate(basketball, this.transform);
     }
 
-    Transform Recycle()
+    Basketball Recycle()
     {
-        Transform ball = basketballs.Pop();
+        Basketball ball;
+        lock (lockObject)
+        {
+             ball = basketballs.Pop();
+        }
         ball.gameObject.SetActive(true);
         return ball;
     }
 
+    Object lockObject = new Object();
 }
