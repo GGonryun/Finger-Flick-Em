@@ -5,12 +5,19 @@ public class MenuInflator : MonoBehaviour
 {
     [SerializeField] MenuElement[] menus;
 
-    public IEnumerator Inflate(int i)
+    public IEnumerator ChangeMenu(int disable, int enable)
+    {
+        if(disable >= 0)
+            yield return StartCoroutine(Deflate(disable));
+        yield return StartCoroutine(Inflate(enable));
+    }
+
+    IEnumerator Inflate(int i)
     {
         yield return StartCoroutine(menus[i].Open());
     }
 
-    public IEnumerator Deflate(int i)
+    IEnumerator Deflate(int i)
     {
         yield return StartCoroutine(menus[i].Close());
     }

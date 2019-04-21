@@ -19,7 +19,7 @@ namespace Animation
         {
             float elapsedTime = 0.0f;
 
-            while (elapsedTime <= duration)
+            while (elapsedTime <= (duration))
             {
                 float t = elapsedTime / duration;
 

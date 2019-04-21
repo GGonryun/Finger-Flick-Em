@@ -10,6 +10,9 @@ namespace Animation
     /// </summary>
     public class Animator : MonoBehaviour
     {
+        [System.NonSerialized]
+        public static float animationSpeed = .75f;
+
         [Header("Settings")]
         [SerializeField] Vector2 startingPosition = Vector2.zero;
         [SerializeField] Vector2 endingPosition = Vector2.zero;
@@ -32,14 +35,14 @@ namespace Animation
         /// </summary>
         IEnumerator Helper(Animation animation)
         {
-            yield return new WaitForSeconds(delay);
+            yield return new WaitForSeconds(delay * animationSpeed);
 
             yield return StartCoroutine(
                 animation.Animate(
                     set: (newPosition) => RectTransform.anchoredPosition = newPosition,
                     startingPosition,
                     endingPosition,
-                    duration
+                    duration * animationSpeed
                 )
             );
 
