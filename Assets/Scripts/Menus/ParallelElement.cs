@@ -9,6 +9,7 @@ public sealed class ParallelElement : MenuElement
 
     [SerializeField] MenuElement[] elements = new MenuElement[0];
 
+
     public override IEnumerator Open()
     {
         foreach (MenuElement menuElement in elements)

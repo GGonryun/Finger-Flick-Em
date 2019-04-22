@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,12 +34,27 @@ public class GameSettings : MonoBehaviour
     [SerializeField] int defaultAudioLevel = 60;
     [SerializeField] int defaultAnimationSpeed = 75;
 
+    Dictionary<Planets, Func<float>> gravity = new Dictionary<Planets, Func<float>>(4)
+    {
+        { Planets.Earth, () => 1f },
+        { Planets.Moon, () => .2f }, //the actual gravity is 0.0125f
+        { Planets.Alien, () => UnityEngine.Random.Range(0.2f, 2.4f) },
+        { Planets.Jupiter, () => 2.4f }
+    };
+
+    public float Gravity { get => gravity[game.planet](); }
+
     public void StartGame()
+    {
+
+        GameManager.Current.LoadGameScene();
+    }
+
+    public void SetSettings()
     {
         SetBalls();
         SetPlanet();
         SetMode();
-        GameManager.Current.LoadGameScene();
     }
 
     public void EnableAudio()
@@ -75,7 +91,7 @@ public class GameSettings : MonoBehaviour
                 return;
         }
         throw new System.ArgumentOutOfRangeException($"The parameter entered is not a valid: [{name}].");
-        
+
     }
 
     void SetMode()
@@ -83,7 +99,7 @@ public class GameSettings : MonoBehaviour
         Toggle active = modeGroup.ActiveToggles().First();
         string name = active.gameObject.name;
 
-        switch(name)
+        switch (name)
         {
             case "Free Play":
                 game.mode = Modes.FreePlay;

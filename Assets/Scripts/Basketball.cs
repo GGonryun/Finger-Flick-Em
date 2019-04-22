@@ -4,7 +4,14 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Basketball : MonoBehaviour, ILaunchable
 {
-    public Recycler reclaimer;
+    Recycler reclaimer;
+    Rigidbody2D rb;
+
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        rb.gravityScale = 0f;
+    }
 
     public void Initialize(Vector2 position, Recycler reclaimer)
     {
@@ -12,11 +19,19 @@ public class Basketball : MonoBehaviour, ILaunchable
         this.transform.position = position;
     }
 
+    public void Freeze()
+    {
+        rb.velocity = Vector2.zero;
+        rb.angularVelocity = 0f;
+        rb.gravityScale = 0f;
+    }
+
     public void Launch(Vector3 force)
     {
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
-        rb.velocity = force;
+        rb.gravityScale = GameManager.Current.Gravity;
         rb.angularVelocity = Random.Range(0f, 180f);
+        rb.velocity = force;
         StartCoroutine(Timeout());
     }
     IEnumerator Timeout()

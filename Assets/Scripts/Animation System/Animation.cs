@@ -23,7 +23,8 @@ namespace Animation
             {
                 float t = elapsedTime / duration;
 
-                set(TimingFunction(start, stop, t));
+                Vector2 interpolatedPoint = TimingFunction(start, stop, t);
+                set(interpolatedPoint);
 
                 yield return new WaitForEndOfFrame();
                 elapsedTime += Time.deltaTime;

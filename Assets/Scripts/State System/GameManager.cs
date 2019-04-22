@@ -17,6 +17,8 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] Transform audioFolder = null;
     [SerializeField] SceneLoader sceneLoader = null;
     [SerializeField] Launcher[] launchers = new Launcher[4];
+    public float Gravity { get => settings.Gravity; }
+
     protected override void Awake()
     {
         base.Awake();
@@ -43,6 +45,7 @@ public class GameManager : Singleton<GameManager>
         DontDestroyOnLoad(menuInflator);
         DontDestroyOnLoad(audioFolder);
         DontDestroyOnLoad(uiColliderFolder);
+        DontDestroyOnLoad(TouchSystem.PointerManager.Current);
     }
 
     public void CloseApplication()
@@ -57,10 +60,12 @@ public class GameManager : Singleton<GameManager>
     public void ChangeState(int s)
     {
         ActivateLaunchers(s == 0 ? true : false);
+        if(s == 0) settings.SetSettings();
         if (s == 4) settings.StartGame();
         ChangeMenu(s);
         state = (GameState)s;
     }
+
     public void LoadGameScene()
     {
         sceneLoader.Load(2);
