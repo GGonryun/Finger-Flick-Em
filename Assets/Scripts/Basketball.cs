@@ -32,12 +32,9 @@ public class Basketball : MonoBehaviour, ILaunchable
         rb.gravityScale = GameManager.Current.Gravity;
         rb.angularVelocity = Random.Range(0f, 180f);
         rb.velocity = force;
-        StartCoroutine(Timeout());
     }
-    IEnumerator Timeout()
+    public void Reclaim()
     {
-        yield return new WaitForSeconds(timer);
         reclaimer.Reclaim(this);
     }
-    float timer = 8.0f;
 }
