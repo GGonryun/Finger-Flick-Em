@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Ball;
 
 namespace TouchSystem
 {
     public class DetectContact : MonoBehaviour
     {
-        Dictionary<int, Pair<Basketball, Vector3>> balls = new Dictionary<int, Pair<Basketball, Vector3>>(4);
+        Dictionary<int, Pair<Ball.Ball, Vector3>> balls = new Dictionary<int, Pair<Ball.Ball, Vector3>>(4);
         #region MONOBEHAVIOUR
         protected virtual void OnEnable()
         {
@@ -37,10 +38,10 @@ namespace TouchSystem
                 RaycastHit2D hitInformation = Physics2D.Raycast(touchPosWorld2D, Camera.main.transform.forward);
                 if (hitInformation.collider != null && hitInformation.rigidbody.tag == "Ball")
                 {
-                    Basketball ball = hitInformation.transform.GetComponent<Basketball>();
+                    Ball.Ball ball = hitInformation.transform.GetComponent<Ball.Ball>();
                     ball.Freeze();
 
-                    Pair<Basketball, Vector3> pair = new Pair<Basketball, Vector3>(ball, touchPosWorld2D);
+                    Pair<Ball.Ball, Vector3> pair = new Pair<Ball.Ball, Vector3>(ball, touchPosWorld2D);
 
                     balls.Add(pointerID, pair);
                 }
@@ -55,7 +56,7 @@ namespace TouchSystem
 
                 if(balls.ContainsKey(pointerID))
                 {
-                    Basketball ball = balls[pointerID].First;
+                    Ball.Ball ball = balls[pointerID].First;
                     Vector3 start = balls[pointerID].Second;
 
                     Vector3 touchPosWorld = Camera.main.ScreenToWorldPoint(PointerManager.GetPointerPosition(pointerID));

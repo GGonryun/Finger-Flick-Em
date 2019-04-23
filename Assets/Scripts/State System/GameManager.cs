@@ -1,3 +1,4 @@
+using Ball;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,15 +10,28 @@ public enum GameState { None = -1, MainMenu = 0, GameSettings = 1, Settings = 2,
 public class GameManager : Singleton<GameManager>
 {
     public GameState state = GameState.None;
-    [SerializeField] MenuInflator menuInflator = null;
+    [SerializeField] MenuInflator userInterfaceInflator = null;
     [SerializeField] Transform uiColliderFolder = null;
     [SerializeField] Recycler recycler = null;
     [SerializeField] GameSettings settings = null;
     [SerializeField] AudioSource themeSong = null;
     [SerializeField] Transform audioFolder = null;
     [SerializeField] SceneLoader sceneLoader = null;
+    [SerializeField] Eraser eraser = null;
     [SerializeField] Launcher[] launchers = new Launcher[4];
     public float Gravity { get => settings.Gravity; }
+    public bool[] BallTypes { get => settings.Balls; }
+    public bool NoBall
+    {
+        get
+        {
+            foreach (bool has in BallTypes)
+                if (has)
+                    return false;
+
+            return true;
+        }
+    }
 
     protected override void Awake()
     {
@@ -42,10 +56,10 @@ public class GameManager : Singleton<GameManager>
     {
         DontDestroyOnLoad(this);
         DontDestroyOnLoad(recycler);
-        DontDestroyOnLoad(menuInflator);
+        DontDestroyOnLoad(userInterfaceInflator);
         DontDestroyOnLoad(audioFolder);
         DontDestroyOnLoad(uiColliderFolder);
-        DontDestroyOnLoad(TouchSystem.PointerManager.Current);
+        DontDestroyOnLoad(eraser);
     }
 
     public void CloseApplication()
@@ -61,13 +75,14 @@ public class GameManager : Singleton<GameManager>
     {
         ActivateLaunchers(s == 0 ? true : false);
         if(s == 0) settings.SetSettings();
-        if (s == 4) settings.StartGame();
+        if (s == 4) LoadGameScene();
         ChangeMenu(s);
         state = (GameState)s;
     }
 
     public void LoadGameScene()
     {
+        recycler.ReclaimAll();
         sceneLoader.Load(2);
     }
 
@@ -86,7 +101,7 @@ public class GameManager : Singleton<GameManager>
 
     void ChangeMenu(int to)
     {
-        StartCoroutine(menuInflator.ChangeMenu((int)state, to));
+        StartCoroutine(userInterfaceInflator.ChangeMenu((int)state, to));
     }
 
     void ActivateLaunchers(bool enable)
@@ -97,5 +112,4 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    int currentMenu = 0;
 }

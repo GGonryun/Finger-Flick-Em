@@ -21,14 +21,14 @@ public class GameSettings : MonoBehaviour
     [SerializeField] RoundData game = new RoundData();
 
     [Header("Slider Controls")]
-    [SerializeField] Slider audioSlider;
-    [SerializeField] Slider animationSlider;
-    [SerializeField] AudioSource sliderAudio;
+    [SerializeField] Slider audioSlider = null;
+    [SerializeField] Slider animationSlider = null;
+    [SerializeField] AudioSource sliderAudio = null;
 
     [Header("Toggle Controls")]
-    [SerializeField] ToggleGroup planetGroup;
-    [SerializeField] ToggleGroup modeGroup;
-    [SerializeField] Toggle[] ballToggles;
+    [SerializeField] ToggleGroup planetGroup = null;
+    [SerializeField] ToggleGroup modeGroup = null;
+    [SerializeField] Toggle[] ballToggles = new Toggle[0];
 
     [Header("Defaults")]
     [SerializeField] int defaultAudioLevel = 60;
@@ -44,11 +44,9 @@ public class GameSettings : MonoBehaviour
 
     public float Gravity { get => gravity[game.planet](); }
 
-    public void StartGame()
-    {
+    public bool[] Balls { get => game.balls; }
 
-        GameManager.Current.LoadGameScene();
-    }
+    
 
     public void SetSettings()
     {
@@ -72,9 +70,9 @@ public class GameSettings : MonoBehaviour
 
     void SetPlanet()
     {
-        Toggle active = planetGroup.ActiveToggles().First();
+        var toggles = planetGroup.ActiveToggles();
 
-        string name = active.transform.parent.parent.name;
+        string name = toggles.Count() > 0 ? toggles.First().transform.parent.parent.name : "Earth";
         switch (name)
         {
             case "Earth":

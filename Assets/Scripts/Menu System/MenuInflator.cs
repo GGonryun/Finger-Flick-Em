@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class MenuInflator : MonoBehaviour
 {
-    [SerializeField] MenuElement[] menus;
+    [SerializeField] MenuElement[] menus = new MenuElement[0];
 
     public IEnumerator ChangeMenu(int disable, int enable)
     {

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class DisplayText : MonoBehaviour
 {
-    [SerializeField] Text display;
+    [SerializeField] Text display = null;
 
     public void Display(Slider slider)
     {
