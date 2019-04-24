@@ -13,6 +13,7 @@ Click & Drag to launch the ball!
 
 # Stats:
 ![Balls](./Media/image5.png)
+
 | Name: | Tennisball | Football | Basketball | Volleyball | Soccerball | None |
 |:--|:-:|:-:|:-:|:-:|:-:|:-:|
 | Size (PPSI): | 94 | 60 | 64 | 72 | 68 | 64 |
