@@ -16,6 +16,8 @@ public class GameSettings : MonoBehaviour
         public Planets planet = Planets.Earth;
         public Modes mode = 0;
         public bool[] balls = new bool[5] { false, false, true, false, false };
+        public float bounceMultiplier = 1.4f;
+        public float velocityMultiplier = 5f;
     }
 
     [SerializeField] RoundData game = new RoundData();
@@ -46,7 +48,8 @@ public class GameSettings : MonoBehaviour
 
     public bool[] Balls { get => game.balls; }
 
-    
+    public float BounceMultiplier { get => game.bounceMultiplier; }
+    public float VelocityMultiplier { get => game.velocityMultiplier; }
 
     public void SetSettings()
     {

@@ -18,6 +18,9 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] Transform audioFolder = null;
     [SerializeField] SceneLoader sceneLoader = null;
     [SerializeField] Eraser eraser = null;
+    [SerializeField] ScoreKeeper scoreKeeper = null;
+    [SerializeField] ParticleLauncher particleLauncher = null;
+    [SerializeField] Spawner spawner = null;
     [SerializeField] Launcher[] launchers = new Launcher[4];
     public float Gravity { get => settings.Gravity; }
     public bool[] BallTypes { get => settings.Balls; }
@@ -75,15 +78,17 @@ public class GameManager : Singleton<GameManager>
     {
         ActivateLaunchers(s == 0 ? true : false);
         if(s == 0) settings.SetSettings();
+        recycler.ReclaimAll();
         if (s == 4) LoadGameScene();
-        ChangeMenu(s);
+            ChangeMenu(s);
         state = (GameState)s;
     }
 
     public void LoadGameScene()
     {
-        recycler.ReclaimAll();
+        scoreKeeper.ResetScore();
         sceneLoader.Load(2);
+        SpawnBall();
     }
 
     public void LoadMenuScene()
@@ -99,6 +104,48 @@ public class GameManager : Singleton<GameManager>
             themeSong.Stop();
     }
 
+    #region SCORE SUBSYSTEM
+    int bounces = 1;
+
+    public void IncreaseScore(Ball.Ball ball)
+    {
+        if (state == 0) return;
+
+        float velocityBonus = ball.SquaredVelocity < 100f ? 1f : (ball.SquaredVelocity < 200f ? settings.VelocityMultiplier/3f : (ball.SquaredVelocity < 400f ? settings.VelocityMultiplier/2f : settings.VelocityMultiplier));
+        Debug.Log($"Velocity: {ball.SquaredVelocity}, Multiplier: {velocityBonus}");
+        float score = ball.Value * (bounces * settings.BounceMultiplier) * (velocityBonus);
+        scoreKeeper.IncreaseScore(score);
+        ReclaimBall(ball);
+        SpawnBall();
+    }
+
+    void CountBounce(object sender, BounceEventArgs e)
+    {
+        bounces++;
+        particleLauncher.Bounce(e.Location);
+    }
+
+    void ResetBounceCounter(object sender, System.EventArgs e)
+    {
+        bounces = 0;
+    }
+    #endregion SCORE SUBSYSTEM
+
+    void SpawnBall()
+    {
+        Ball.Ball ball = spawner.SpawnBall();
+        ball.OnBounce += CountBounce;
+        ball.OnFreeze += ResetBounceCounter;
+        bounces = 1;
+    }
+
+    void ReclaimBall(Ball.Ball ball)
+    {
+        ball.OnBounce -= CountBounce;
+        ball.OnFreeze -= ResetBounceCounter;
+        ball.Reclaim();
+        particleLauncher.Explode(ball.transform.position);
+    }
     void ChangeMenu(int to)
     {
         StartCoroutine(userInterfaceInflator.ChangeMenu((int)state, to));
@@ -111,5 +158,4 @@ public class GameManager : Singleton<GameManager>
             launcher.Activate(enable);
         }
     }
-
 }
