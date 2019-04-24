@@ -21,7 +21,7 @@ namespace Ball
         {
             if (collision.tag == tag)
             {
-                collision.GetComponentInParent<Ball>().Reclaim();
+                collision.GetComponent<Ball>().Reclaim();
             }
         }
     }

@@ -39,9 +39,9 @@ namespace Ball
             GameObject[] ballObjects = GameObject.FindGameObjectsWithTag("Ball");
             foreach(GameObject obj in ballObjects)
             {
-                if(obj.activeSelf)
+                if(obj.activeSelf || obj.activeInHierarchy)
                 {
-                    obj.transform.position = Vector2.down * 20f;
+                    obj.transform.position = new Vector3(-999f, -999f, 0);
                 }
             }
         }
@@ -68,9 +68,28 @@ namespace Ball
             return b;
         }
 
+        public static Type RandomlySelectType()
+        {
+            int index = 0;
+            if (GameManager.Current.NoBall)
+            {
+                return TypeHelper.Get(0);
+            }
+
+            do
+            {
+                index = UnityEngine.Random.Range(0, TypeHelper.Length - 1);
+            }
+            while (GameManager.Current.BallTypes[index] == false);
+
+            return TypeHelper.Get(index + 1);
+        }
+
         Ball Create(Type t)
         {
-            return Instantiate(prefabs[(int)t], this.transform) as Ball;
+            Ball ball = Instantiate(prefabs[(int)t], this.transform) as Ball;
+            ball.Initialize(this, t, TypeHelper.Value((int)t));
+            return ball;
         }
 
         Ball Recycle(Type t)

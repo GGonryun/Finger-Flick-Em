@@ -25,41 +25,17 @@ namespace Ball
         void Launch()
         {
             bool success = Random.Range(0f, 1f) <= spawnChance ? true : false;
-            Type t = RandomlySelectType();
             if (active && success)
             {
-                Ball ball = recyclingBin.Get(t);
+                Ball ball = recyclingBin.Get(Recycler.RandomlySelectType());
 
-                Initialize(ball, t);
-
-                Throw(ball as ILaunchable);
+                Throw(ball);
             }
         }
 
-        private Type RandomlySelectType()
+        void Throw(Ball ball)
         {
-            int index = 0;
-            if(GameManager.Current.NoBall)
-            {
-                return TypeHelper.Get(0);
-            }
-
-            do
-            {
-                index = UnityEngine.Random.Range(0, TypeHelper.Length-1);
-            }
-            while (GameManager.Current.BallTypes[index] == false);
-
-            return TypeHelper.Get(index+1);
-        }
-
-        void Initialize(Ball ball, Type t)
-        {
-            ball.Initialize(launchPoint, recyclingBin, t);
-        }
-
-        void Throw(ILaunchable ball)
-        {
+            ball.SetPosition(launchPoint);
             if (ball is ILaunchable)
             {
                 float x = Random.Range(velocity.x - discrepency, velocity.x + discrepency);
